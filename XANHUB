@@ -1,0 +1,131 @@
+local NothingLibrary = loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/3345-c-a-t-s-u-s/NOTHING/main/source.lua'))();
+
+local Windows = NothingLibrary.new({
+	Title = "XANHUB",
+	Description = "WELLCOME",
+	Keybind = Enum.KeyCode.LeftControl,
+	Logo = 'http://www.roblox.com/asset/?id=18898582662'
+})
+
+-- 🕒 ตัวแปรตั้งเวลา (ค่าเริ่มต้น 15 วินาที)
+getgenv().AutoDelay = 15
+
+-- 📦 Tab: Seeds
+local TabSeeds = Windows:NewTab({
+	Title = "Seeds",
+	Description = "seed shop",
+	Icon = "rbxassetid://7733960981"
+})
+
+local SectionSeeds = TabSeeds:NewSection({
+	Title = "Seeds",
+	Icon = "rbxassetid://7743869054",
+	Position = "Left"
+})
+---------
+-- 🕹️ ตัวเลื่อนตั้งเวลา
+---------
+SectionSeeds:NewSlider({
+	Title = "ตั้งเวลาซื้อ (วินาที)",
+	Min = 5,
+	Max = 60,
+	Default = 15,
+	Callback = function(value)
+		getgenv().AutoDelay = value
+	end,
+})
+
+----------
+-- 🪴 ฟังก์ชันสร้าง Toggle ซื้อ Seeds
+----------
+local function CreateAutoBuyToggle(section, title, itemName)
+	section:NewToggle({
+		Title = title,
+		Default = false,
+		Callback = function(state)
+			getgenv()[itemName] = state
+			task.spawn(function()
+				repeat
+					local args = {[1] = itemName, [2] = true}
+					game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(unpack(args))
+					task.wait(getgenv().AutoDelay)
+				until not getgenv()[itemName]
+			end)
+		end,
+	})
+end
+
+----------
+-- 🌾 Seeds
+----------
+CreateAutoBuyToggle(SectionSeeds, "Cactus", "Cactus Seed")
+CreateAutoBuyToggle(SectionSeeds, "Strawberry", "Strawberry Seed")
+CreateAutoBuyToggle(SectionSeeds, "Pumpkin", "Pumpkin Seed")
+CreateAutoBuyToggle(SectionSeeds, "Sunflower", "Sunflower Seed")
+CreateAutoBuyToggle(SectionSeeds, "Dragon Fruit", "Dragon Fruit Seed")
+CreateAutoBuyToggle(SectionSeeds, "Eggplant", "Eggplant Seed")
+CreateAutoBuyToggle(SectionSeeds, "Watermelon", "Watermelon Seed")
+CreateAutoBuyToggle(SectionSeeds, "Mr Carrot", "Mr Carrot Seed")
+CreateAutoBuyToggle(SectionSeeds, "Tomatrio", "Tomatrio Seed")
+CreateAutoBuyToggle(SectionSeeds, "Shroombino", "Shroombino Seed")
+CreateAutoBuyToggle(SectionSeeds, "Mango", "Mango Seed")
+
+----------
+-- 🧠 Equip Best Brainrots
+----------
+SectionSeeds:NewToggle({
+	Title = "Equip Best Brainrots",
+	Default = false,
+	Callback = function(state)
+		getgenv().autoEquip = state
+		task.spawn(function()
+			repeat
+				game:GetService("ReplicatedStorage").Remotes.EquipBestBrainrots:FireServer()
+				task.wait(getgenv().AutoDelay)
+			until not getgenv().autoEquip
+		end)
+	end,
+})
+
+----------
+-- ⚙️ Tab: Gear
+----------
+local TabGear = Windows:NewTab({
+	Title = "Gear",
+	Description = "gear shop",
+	Icon = "rbxassetid://7733960981"
+})
+
+local SectionGear = TabGear:NewSection({
+	Title = "Gear",
+	Icon = "rbxassetid://7743869054",
+	Position = "Left"
+})
+
+----------
+-- ⚙️ ฟังก์ชันสร้าง Toggle ซื้อ Gear
+----------
+local function CreateAutoGearToggle(section, title, gearName)
+	section:NewToggle({
+		Title = title,
+		Default = false,
+		Callback = function(state)
+			getgenv()[gearName] = state
+			task.spawn(function()
+				repeat
+					local args = {[1] = gearName, [2] = true}
+					game:GetService("ReplicatedStorage").Remotes.BuyGear:FireServer(unpack(args))
+					task.wait(getgenv().AutoDelay)
+				until not getgenv()[gearName]
+			end)
+		end,
+	})
+end
+
+----------
+-- ⚙️ Gear
+----------
+CreateAutoGearToggle(SectionGear, "Water Bucket", "Water Bucket")
+CreateAutoGearToggle(SectionGear, "Frost Grenade", "Frost Grenade")
+CreateAutoGearToggle(SectionGear, "Banana Gun", "Banana Gun")
+CreateAutoGearToggle(SectionGear, "Carrot Launcher", "Carrot Launcher")
