@@ -128,4 +128,5 @@ end
 CreateAutoGearToggle(SectionGear, "Water Bucket", "Water Bucket")
 CreateAutoGearToggle(SectionGear, "Frost Grenade", "Frost Grenade")
 CreateAutoGearToggle(SectionGear, "Banana Gun", "Banana Gun")
+CreateAutoGearToggle(SectionGear, "Frost Blower", "Frost Blower")
 CreateAutoGearToggle(SectionGear, "Carrot Launcher", "Carrot Launcher")
