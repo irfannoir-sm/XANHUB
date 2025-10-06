@@ -1,19 +1,46 @@
 local NothingLibrary = loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/3345-c-a-t-s-u-s/NOTHING/main/source.lua'))();
 
+-- 🪄 หน้าต่างหลัก
 local Windows = NothingLibrary.new({
-	Title = "XANHUB",
-	Description = "WELLCOME",
-	Keybind = Enum.KeyCode.LeftControl,
+	Title = "XAN HUB",
+	Description = "",
+	Keybind = Enum.KeyCode.RightControl, -- ปุ่มเปิด/ปิดเมนู
 	Logo = 'http://www.roblox.com/asset/?id=18898582662'
 })
 
--- 🕒 ตัวแปรตั้งเวลา (ค่าเริ่มต้น 15 วินาที)
+-- 🕒 ตั้งเวลาเริ่มต้น
 getgenv().AutoDelay = 15
 
--- 📦 Tab: Seeds
+--------------------------------------------------------------------------------
+-- 🌾 ฟังก์ชันหลัก
+--------------------------------------------------------------------------------
+
+-- 🧠 Anti-AFK Function
+local function EnableAntiAFK()
+	if getgenv().AntiAFK_Enabled then return end
+	getgenv().AntiAFK_Enabled = true
+
+	local vu = game:GetService("VirtualUser")
+	game:GetService("Players").LocalPlayer.Idled:Connect(function()
+		vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+		task.wait(1)
+		vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+	end)
+
+	game.StarterGui:SetCore("SendNotification", {
+		Title = "XAN System";
+		Text = "✅ Anti-AFK Activated";
+		Duration = 5;
+	})
+end
+
+--------------------------------------------------------------------------------
+-- 🌾 Tab: Seed Shop
+--------------------------------------------------------------------------------
+
 local TabSeeds = Windows:NewTab({
-	Title = "Seeds",
-	Description = "seed shop",
+	Title = "Seed Shop",
+	Description = "XAN Seeds Automation",
 	Icon = "rbxassetid://7733960981"
 })
 
@@ -22,9 +49,8 @@ local SectionSeeds = TabSeeds:NewSection({
 	Icon = "rbxassetid://7743869054",
 	Position = "Left"
 })
----------
--- 🕹️ ตัวเลื่อนตั้งเวลา
----------
+
+-- 🕹️ ตั้งเวลาซื้อ
 SectionSeeds:NewSlider({
 	Title = "ตั้งเวลาซื้อ (วินาที)",
 	Min = 5,
@@ -35,9 +61,7 @@ SectionSeeds:NewSlider({
 	end,
 })
 
-----------
--- 🪴 ฟังก์ชันสร้าง Toggle ซื้อ Seeds
-----------
+-- 🪴 ฟังก์ชัน AutoBuy Seeds
 local function CreateAutoBuyToggle(section, title, itemName)
 	section:NewToggle({
 		Title = title,
@@ -55,9 +79,7 @@ local function CreateAutoBuyToggle(section, title, itemName)
 	})
 end
 
-----------
--- 🌾 Seeds
-----------
+-- 🌾 รายการ Seeds
 CreateAutoBuyToggle(SectionSeeds, "Cactus", "Cactus Seed")
 CreateAutoBuyToggle(SectionSeeds, "Strawberry", "Strawberry Seed")
 CreateAutoBuyToggle(SectionSeeds, "Pumpkin", "Pumpkin Seed")
@@ -73,9 +95,7 @@ CreateAutoBuyToggle(SectionSeeds, "Tomatrio", "Tomatrio Seed")
 CreateAutoBuyToggle(SectionSeeds, "Shroombino", "Shroombino Seed")
 CreateAutoBuyToggle(SectionSeeds, "Mango", "Mango Seed")
 
-----------
 -- 🧠 Equip Best Brainrots
-----------
 SectionSeeds:NewToggle({
 	Title = "Equip Best Brainrots",
 	Default = false,
@@ -90,12 +110,13 @@ SectionSeeds:NewToggle({
 	end,
 })
 
-----------
+--------------------------------------------------------------------------------
 -- ⚙️ Tab: Gear
-----------
+--------------------------------------------------------------------------------
+
 local TabGear = Windows:NewTab({
 	Title = "Gear",
-	Description = "gear shop",
+	Description = "Gear Shop",
 	Icon = "rbxassetid://7733960981"
 })
 
@@ -105,9 +126,7 @@ local SectionGear = TabGear:NewSection({
 	Position = "Left"
 })
 
-----------
--- ⚙️ ฟังก์ชันสร้าง Toggle ซื้อ Gear
-----------
+-- ⚙️ AutoBuy Gear
 local function CreateAutoGearToggle(section, title, gearName)
 	section:NewToggle({
 		Title = title,
@@ -125,11 +144,51 @@ local function CreateAutoGearToggle(section, title, gearName)
 	})
 end
 
-----------
--- ⚙️ Gear
-----------
 CreateAutoGearToggle(SectionGear, "Water Bucket", "Water Bucket")
 CreateAutoGearToggle(SectionGear, "Frost Grenade", "Frost Grenade")
 CreateAutoGearToggle(SectionGear, "Banana Gun", "Banana Gun")
 CreateAutoGearToggle(SectionGear, "Frost Blower", "Frost Blower")
-CreateAutoGearToggle(SectionGear, "Carrot Launcher", "Carrot Launcher")
+
+--------------------------------------------------------------------------------
+-- 🧠 Tab: Anti (อยู่ล่างสุด)
+--------------------------------------------------------------------------------
+
+local TabAnti = Windows:NewTab({
+	Title = "Setting",
+	Description = "Setting",
+	Icon = "rbxassetid://7734053429"
+})
+
+local SectionAnti = TabAnti:NewSection({
+	Title = "",
+	Icon = "rbxassetid://7734053429",
+	Position = "Left"
+})
+
+-- 🧠 Toggle Anti-AFK
+SectionAnti:NewToggle({
+	Title = "Anti-AFK",
+	Default = false,
+	Callback = function(state)
+		if state then
+			EnableAntiAFK()
+		else
+			game.StarterGui:SetCore("SendNotification", {
+				Title = "XAN HUB";
+				Text = "🛑 Anti-AFK Disabled";
+				Duration = 3;
+			})
+			getgenv().AntiAFK_Enabled = false
+		end
+	end,
+})
+
+--------------------------------------------------------------------------------
+-- 💬 แจ้งเตือนตอนโหลดเสร็จ
+--------------------------------------------------------------------------------
+
+game.StarterGui:SetCore("SendNotification", {
+	Title = "XAN HUB✅";
+	Text = "Thank you";
+	Duration = 8;
+})
